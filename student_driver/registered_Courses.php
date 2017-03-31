@@ -115,7 +115,7 @@ $studentCourses = $queryStudentCourses->fetchAll();
         </tr>
     <?php endforeach; ?>
 </table>
-<br/><br/>
+<br/>
 
 
 <a href="../student_driver/student_home.php">Back To Registration</a>
