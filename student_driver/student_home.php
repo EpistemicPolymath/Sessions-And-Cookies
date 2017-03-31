@@ -129,7 +129,8 @@ $queryAllCourses->closeCursor();
         </table>
         <br/>
 
-        <a href="../student_driver/registered_Courses.php">See Registered Courses</a>
+        <a href="../student_driver/registered_Courses.php">See Registered Courses</a><br /> <br />
+        <a href="../users/user_logout.php">Log Out</a>
 
     </section>
 </main>

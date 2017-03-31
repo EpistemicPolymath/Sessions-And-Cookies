@@ -142,7 +142,8 @@ $queryAllCourses->closeCursor();
 
         <a href="../manager_driver/course_Insert_Form.php?department_id=<?= $department_id ?>">Add Course</a> <br/>
         <br/>
-        <a href="../manager_driver/department_list.php">List Departments</a>
+        <a href="../manager_driver/department_list.php">List Departments</a><br /> <br />
+        <a href="../users/user_logout.php">Log Out</a>
 
     </section>
 </main>

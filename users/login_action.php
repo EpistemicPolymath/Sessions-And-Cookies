@@ -42,7 +42,7 @@ if ($userSelect > 0) {
 
 # Now we need an if statement to check role and determine which homepage to send them to
     if($userSelect['role'] == 'manager'){
-        header("Location:../manager_driver/index.php?departmentID=". $deptID);
+        header("Location:../manager_driver/index.php");
     } elseif($userSelect['role'] == 'student'){
         header("Location:../student_driver/student_home.php?departmentID=". $deptID);
     }else{
