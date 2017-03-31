@@ -34,7 +34,7 @@ if (isset($_SESSION['errorResponse'])) {
     if(isset($errorResponse)){
 
         echo "$errorResponse";
-
+        unset($_SESSION['errorResponse']);
     }
 
     ?>
