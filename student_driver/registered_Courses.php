@@ -1,5 +1,7 @@
 <?php
 
+#Initiatie the Session
+session_start();
 
 #Require the database so that we can use the $db variable to reach the database
 #This is setup in database.php
@@ -63,10 +65,6 @@ if (isset($_SESSION['userID'])) {
 
     $userID = $_SESSION['userID'];
 
-} else {
-
-    $userID = null;
-
 }
 
 #Initiate Database Query for Student's Registered Courses
@@ -95,9 +93,7 @@ $studentCourses = $queryStudentCourses->fetchAll();
         <th>Title</th>
         <th>Credits</th>
         <th>Description</th>
-        <!--Delete-->
-        <th></th>
-        <!--Update-->
+        <!--Drop-->
         <th></th>
     </tr>
 
