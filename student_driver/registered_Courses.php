@@ -27,45 +27,58 @@ $department = $queryDepartmentName->fetch();
 #Takes the current DepartmentName from the Query and stores as an isolated variable
 $department_name = $department['departmentName'];
 $queryDepartmentName->closeCursor();
-//print_r($department);
 
 
-//Get All From Departments
-#Select all from departments and store in departments array (For use of Name and ID together in ForEach
-$queryAllDepartments = $db->prepare("SELECT * 
-                        FROM department");
-$queryAllDepartments->execute();
-$departments = $queryAllDepartments->fetchall();
-$queryAllDepartments->closecursor();
-//print_r($departments);
+////Get All From Departments
+//#Select all from departments and store in departments array (For use of Name and ID together in ForEach
+//$queryAllDepartments = $db->prepare("SELECT *
+//                        FROM department");
+//$queryAllDepartments->execute();
+//$departments = $queryAllDepartments->fetchall();
+//$queryAllDepartments->closecursor();
+////print_r($departments);
+//
+//
+//// Select all Courses Depending on departmentID or selected department
+//$queryAllCourses = $db->prepare("SELECT *
+//                                FROM courses
+//                                WHERE dep_id = :departmentID
+//                                ORDER BY crs_ID");
+//# I use arrays within excute staments instead of bindParam
+//$queryAllCourses->execute(array(
+//    ':departmentID' => $departmentID
+//));
+//#Create an array of all of the courses for use (By using a fetchAll)
+//$courses = $queryAllCourses->fetchAll();
+//$queryAllCourses->closeCursor();
 
 
-// Select all Courses Depending on departmentID or selected department
-$queryAllCourses = $db->prepare("SELECT *
-                                FROM courses
-                                WHERE dep_id = :departmentID
-                                ORDER BY crs_ID");
-# I use arrays within excute staments instead of bindParam
-$queryAllCourses->execute(array(
-    ':departmentID' => $departmentID
+////Select Courses From Reg_Courses that correspond to crs_id
+//#Get crs_id
+//
+//$crs_id = filter_input(INPUT_GET, 'crs_id', FILTER_VALIDATE_INT);
+
+#Check if Sessions userID isset
+if (isset($_SESSION['userID'])) {
+
+    $userID = $_SESSION['userID'];
+
+} else {
+
+    $userID = null;
+
+}
+
+#Initiate Database Query for Student's Registered Courses
+$queryStudentCourses = $db->prepare("SELECT DISTINCT c.crs_ID, c.crs_code, c.crs_title, c.crs_credits, c.crs_description, c.dep_id
+                                              FROM courses c INNER JOIN reg_courses r ON (c.crs_ID = r.crs_ID)
+                                                             INNER JOIN users u ON (r.userID = u.userID)
+                                              WHERE r.userID = :userID");
+
+$queryStudentCourses->execute(array(
+    ":userID" => $userID
 ));
-#Create an array of all of the courses for use (By using a fetchAll)
-$courses = $queryAllCourses->fetchAll();
-$queryAllCourses->closeCursor();
-
-
-
-//Select Courses From Reg_Courses that correspond to crs_id
-
-#Get crs_id
-
-$crs_id = filter_input(INPUT_GET, 'crs_id', FILTER_VALIDATE_INT);
-
-$queryStudentCourses = $db->prepare("SELECT *
-                                    FROM courses, reg_courses
-                                    WHERE reg_courses.")
-
-
+$studentCourses = $queryStudentCourses->fetchAll();
 
 ?>
 
@@ -74,7 +87,6 @@ $queryStudentCourses = $db->prepare("SELECT *
 
 <h1>My Courses</h1>
 <hr/>
-
 
 
 <table>
@@ -89,7 +101,7 @@ $queryStudentCourses = $db->prepare("SELECT *
         <th></th>
     </tr>
 
-    <?php foreach ($courses as $course) : ?>
+    <?php foreach ($studentCourses as $course) : ?>
         <tr>
             <td><?php echo $course['crs_code']; ?></td>
             <td><?php echo $course['crs_title']; ?></td>
@@ -106,7 +118,8 @@ $queryStudentCourses = $db->prepare("SELECT *
             </td>
         </tr>
     <?php endforeach; ?>
-</table><br /><br />
+</table>
+<br/><br/>
 
 
 <a href="../student_driver/student_home.php">Back To Registration</a>
