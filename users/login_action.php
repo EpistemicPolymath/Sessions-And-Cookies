@@ -8,3 +8,9 @@
 session_start();
 
 require_once('../db_error/database.php');
+
+
+$username = $_POST['uname'];
+$password = $_POST['psw'];
+
+print_r($_POST);
