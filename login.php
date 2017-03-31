@@ -7,7 +7,13 @@
  */
 
 
-//session_start();
+session_start();
+//$errorResponse = $_GET['errorResponse'];
+
+#Check if the Session error response was set and display it on page.
+if (isset($_SESSION['errorResponse'])) {
+    $errorResponse = $_SESSION['errorResponse'];
+}
 
 ?>
 <!DOCTYPE html>
@@ -20,6 +26,19 @@
 <body>
 
 <h2>Login Form</h2>
+
+<div class="errorMessageContainer container">
+
+    <?php
+
+    if(isset($errorResponse)){
+
+        echo "$errorResponse";
+
+    }
+
+    ?>
+</div>
 
 <form action="users/login_action.php" method="post">
     <div class="imgcontainer">
@@ -39,7 +58,7 @@
 
     <div class="container" style="background-color:#f1f1f1">
         <button type="button" class="cancelbtn">Cancel</button>
-       <!-- <span class="psw">Forgot <a href="#">password?</a></span> -->
+        <!-- <span class="psw">Forgot <a href="#">password?</a></span> -->
     </div>
 </form>
 

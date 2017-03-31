@@ -37,6 +37,12 @@ button:hover {
     margin: 24px 0 12px 0;
 }
 
+.errorMessageContainer{
+
+    color: red;
+   font-weight: bold;
+}
+
 .container {
     padding: 16px;
 }
