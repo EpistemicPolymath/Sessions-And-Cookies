@@ -9,6 +9,25 @@
 #Start Session
 session_start();
 
+#Make sure page is only accessed by managers
+if (isset($_SESSION['userRole'])) {
+    if ($_SESSION['userRole'] != 'manager') {
+        header("Location:../login.php");
+        $errorResponse = "You do not have the valid permissions to view that page.";
+    }
+} else {
+    header("Location:../login.php");
+    $errorResponse = "User has unrecognized role.";
+}
+
+#Error Message for being sent back to login.php
+if (isset($errorResponse)) {
+
+    #If it is set we create the Session variable
+    $_SESSION['errorResponse'] = $errorResponse;
+    header("Location:../login.php");
+}
+
 #Require the database so that we can use the $db variable to reach the database
 #This is setup in database.php
 require_once("../db_error/database.php");

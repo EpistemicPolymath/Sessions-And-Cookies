@@ -52,7 +52,7 @@ if (isset($_SESSION['errorResponse'])) {
         <input type="password" placeholder="Enter Password" name="pass" required>
 
         <button type="submit">Login</button>
-        <input type="checkbox" checked="checked"> Remember me
+        <input type="checkbox" name="checkbox" checked="checked"> Remember me
     </div>
 
     <div class="container" style="background-color:#f1f1f1">
