@@ -22,6 +22,7 @@ if ($departmentID == NULL || $departmentID == FALSE) {
     $departmentID = 1;
 }
 
+
 // Get name for currently selected Department
 #Query calls for all elements from department table that match the current departmentID from GET
 $queryDepartments = "SELECT * FROM department
@@ -35,17 +36,37 @@ $department = $queryDepartmentName->fetch();
 #Takes the current DepartmentName from the Query and stores as an isolated variable
 $department_name = $department['departmentName'];
 $queryDepartmentName->closeCursor();
-//print_r($department);
 
 
-//Get All From Departments
-#Select all from departments and store in departments array (For use of Name and ID together in ForEach
-$queryAllDepartments = $db->prepare("SELECT * 
-                        FROM department");
-$queryAllDepartments->execute();
-$departments = $queryAllDepartments->fetchall();
-$queryAllDepartments->closecursor();
-//print_r($departments);
+//#Old Query for Student Departments that show of the Departments Now we need to show only 1
+////Get All From Departments
+//#Select all from departments and store in departments array (For use of Name and ID together in ForEach
+//$queryAllDepartments = $db->prepare("SELECT *
+//                        FROM department");
+//$queryAllDepartments->execute();
+//$departments = $queryAllDepartments->fetchall();
+//$queryAllDepartments->closecursor();
+
+
+//Get Departments that apply to specific user
+
+#Check Sessions Department ID
+
+if(isset($_SESSION['deptID'])){
+
+    $deptID = $_SESSION['deptID'];
+
+}
+
+$querySelectDepartments = $db->prepare("SELECT * 
+                        FROM department
+                        WHERE departmentID = :deptID");
+$querySelectDepartments->execute(array(
+        ":deptID" => $deptID
+));
+$department = $querySelectDepartments->fetchAll();
+$querySelectDepartments->closeCursor();
+
 
 
 // Select all Courses Depending on departmentID or selected department
@@ -95,23 +116,6 @@ print_r($checkCourses);
 <main>
     <h1 class="title">University Courses Manager</h1>
     <hr/>
-    <h1>Courses List</h1>
-    <aside>
-        <!-- Display a list of Departments -->
-        <h2>Departments</h2>
-        <nav>
-            <ul>    <!-- Loop through fetchall of Departments and list each by ID and Name -->
-                <?php foreach ($departments as $department) : ?>
-                    <li>
-                        <a href="?departmentID=<?php echo $department['departmentID']; ?>">
-                            <?php echo $department['departmentName']; ?>
-                        </a>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        </nav>
-    </aside>
-
     <section>
         <!-- Department Name -->
 
