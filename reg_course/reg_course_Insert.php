@@ -25,7 +25,7 @@ $query->execute(array(
     ":crs_id" => $crs_id,
     ":userID" => $userID
 ));
-header('Location:../student_driver/registered_Courses');
+header('Location:../student_driver/registered_Courses.php');
 //header("Location:../student_driver/registered_Courses.php?crs_ID=" . $crs_id. "&userID=" . $userID);
 
 exit();

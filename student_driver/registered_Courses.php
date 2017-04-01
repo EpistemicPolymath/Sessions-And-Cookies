@@ -67,6 +67,15 @@ if (isset($_SESSION['userID'])) {
 
 }
 
+#Check Sessions Department ID
+
+if(isset($_SESSION['deptID'])){
+
+    $deptID = $_SESSION['deptID'];
+
+}
+
+
 #Initiate Database Query for Student's Registered Courses
 $queryStudentCourses = $db->prepare("SELECT DISTINCT c.crs_ID, c.crs_code, c.crs_title, c.crs_credits, c.crs_description, c.dep_id
                                               FROM courses c INNER JOIN reg_courses r ON (c.crs_ID = r.crs_ID)
@@ -118,6 +127,6 @@ $studentCourses = $queryStudentCourses->fetchAll();
 <br/>
 
 
-<a href="../student_driver/student_home.php">Back To Registration</a>
+<a href="../student_driver/student_home.php?departmentID=<?= $deptID ?>">Back To Registration</a>
 
 </html>

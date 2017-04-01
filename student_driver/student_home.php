@@ -6,6 +6,9 @@
  * Time: 10:40 PM
  */
 
+#Start the session
+session_start();
+
 #Require the database so that we can use the $db variable to reach the database
 #This is setup in database.php
 require_once("../db_error/database.php");
@@ -59,6 +62,24 @@ $courses = $queryAllCourses->fetchAll();
 $queryAllCourses->closeCursor();
 
 
+#Check if courses are already registered by specific user
+
+#Check if isset
+if (isset($_SESSION['userID'])) {
+
+    $userID = $_SESSION['userID'];
+}
+
+$checkCoursesRegistered = $db->prepare("SELECT crs_ID FROM reg_courses
+                                                WHERE userID = :userID");
+
+$checkCoursesRegistered->execute(array(
+    ":userID" => $userID
+));
+$checkCourses = $checkCoursesRegistered->fetchAll();
+print_r($checkCourses);
+
+
 ?>
 
 <!DOCTYPE html>
@@ -107,21 +128,35 @@ $queryAllCourses->closeCursor();
                 <!--Register-->
                 <th></th>
             </tr>
-        <!-- Row Data -->
+            <!-- Row Data -->
             <?php foreach ($courses as $course) : ?>
                 <tr>
                     <td><?php echo $course['crs_code']; ?></td>
                     <td><?php echo $course['crs_title']; ?></td>
                     <td><?php echo $course['crs_credits']; ?></td>
                     <td><?php echo $course['crs_description']; ?></td>
-                <!-- Allows Student to Register for Specific Course -->
+                    <!-- Allows Student to Register for Specific Course -->
                     <td>
                         <form action="../reg_course/reg_course_Insert.php" method="post">
 
                             <input type="hidden" name="crs_id" value="<?= $course['crs_ID'] ?>">
-                           <!-- <input type="hidden" name="departmentID" value="<?// $departmentID ?>"> -->
+                            <!-- <input type="hidden" name="departmentID" value="<? // $departmentID ?>"> -->
+                            <?php foreach ($checkCourses as $check) : ?>
+                                <?php if ($check['crs_ID'] == $course['crs_ID']) : ?>
+                                    <?php $checked = true; ?>
+                                     <?php break; ?>
+                                <?php else : ?>
+                                    <?php $checked = false; ?>
+                                    <?php continue; ?>
+                                <?php endif;?>
+                            <?php endforeach; ?>
 
-                            <button type="submit">Register</button>
+                            <!-- Determine which Register Button to Place down -->
+                            <?php if($checked == true) : ?>
+                                <button type="submit" disabled>Register</button>
+                            <?php else : ?>
+                                <button type="submit">Register</button>
+                            <?php endif; ?>
                         </form>
                     </td>
                 </tr>
@@ -129,7 +164,7 @@ $queryAllCourses->closeCursor();
         </table>
         <br/>
 
-        <a href="../student_driver/registered_Courses.php">See Registered Courses</a><br /> <br />
+        <a href="../student_driver/registered_Courses.php">See Registered Courses</a><br/> <br/>
         <a href="../users/user_logout.php">Log Out</a>
 
     </section>
