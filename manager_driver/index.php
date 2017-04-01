@@ -6,6 +6,9 @@
  * Time: 10:40 PM
  */
 
+#Start Session
+session_start();
+
 #Require the database so that we can use the $db variable to reach the database
 #This is setup in database.php
 require_once("../db_error/database.php");
@@ -59,6 +62,13 @@ $courses = $queryAllCourses->fetchAll();
 $queryAllCourses->closeCursor();
 
 
+#Check if User's firstName is set
+
+if (isset($_SESSION['firstName'])) {
+
+    $firstname = $_SESSION['firstName'];
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -74,6 +84,9 @@ $queryAllCourses->closeCursor();
 <main>
     <h1 class="title">University Courses Manager</h1>
     <hr/>
+
+    <h1>Welcome back, <?= $firstname ?> </h1>
+
     <h1>Courses List</h1>
     <aside>
         <!-- Display a list of Departments -->

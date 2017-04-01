@@ -14,7 +14,6 @@ if (isset($_SESSION['errorResponse'])) {
     $errorResponse = $_SESSION['errorResponse'];
 }
 
-//print_r($_SESSION);
 ?>
 <!DOCTYPE html>
 <html>
