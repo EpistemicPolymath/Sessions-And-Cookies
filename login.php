@@ -8,7 +8,6 @@
 
 
 session_start();
-//$errorResponse = $_GET['errorResponse'];
 
 #Check if the Session error response was set and display it on page.
 if (isset($_SESSION['errorResponse'])) {

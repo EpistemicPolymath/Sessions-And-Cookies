@@ -9,6 +9,26 @@
 #Start the session
 session_start();
 
+#Make sure page is only accessed by students
+if (isset($_SESSION['userRole'])) {
+    if ($_SESSION['userRole'] != 'student') {
+        header("Location:../login.php");
+        $errorResponse = "You do not have the valid permissions to view that page.";
+    }
+} else {
+    header("Location:../login.php");
+    $errorResponse = "User has unrecognized role.";
+}
+
+#Error Message for being sent back to login.php
+if (isset($errorResponse)) {
+
+    #If it is set we create the Session variable
+    $_SESSION['errorResponse'] = $errorResponse;
+    header("Location:../login.php");
+}
+
+
 #Require the database so that we can use the $db variable to reach the database
 #This is setup in database.php
 require_once("../db_error/database.php");
@@ -37,22 +57,11 @@ $department = $queryDepartmentName->fetch();
 $department_name = $department['departmentName'];
 $queryDepartmentName->closeCursor();
 
-
-//#Old Query for Student Departments that show of the Departments Now we need to show only 1
-////Get All From Departments
-//#Select all from departments and store in departments array (For use of Name and ID together in ForEach
-//$queryAllDepartments = $db->prepare("SELECT *
-//                        FROM department");
-//$queryAllDepartments->execute();
-//$departments = $queryAllDepartments->fetchall();
-//$queryAllDepartments->closecursor();
-
-
 //Get Departments that apply to specific user
 
 #Check Sessions Department ID
 
-if(isset($_SESSION['deptID'])){
+if (isset($_SESSION['deptID'])) {
 
     $deptID = $_SESSION['deptID'];
 
@@ -62,11 +71,10 @@ $querySelectDepartments = $db->prepare("SELECT *
                         FROM department
                         WHERE departmentID = :deptID");
 $querySelectDepartments->execute(array(
-        ":deptID" => $deptID
+    ":deptID" => $deptID
 ));
 $department = $querySelectDepartments->fetchAll();
 $querySelectDepartments->closeCursor();
-
 
 
 // Select all Courses Depending on departmentID or selected department
@@ -98,8 +106,14 @@ $checkCoursesRegistered->execute(array(
     ":userID" => $userID
 ));
 $checkCourses = $checkCoursesRegistered->fetchAll();
-print_r($checkCourses);
 
+
+#Check if firstName isset
+
+if (isset($_SESSION['firstName'])) {
+
+    $firstname = $_SESSION['firstName'];
+}
 
 ?>
 
@@ -116,6 +130,7 @@ print_r($checkCourses);
 <main>
     <h1 class="title">University Courses Manager</h1>
     <hr/>
+    <h1>Welcome back, <?= $firstname ?> </h1> <br/>
     <section>
         <!-- Department Name -->
 
@@ -148,15 +163,15 @@ print_r($checkCourses);
                             <?php foreach ($checkCourses as $check) : ?>
                                 <?php if ($check['crs_ID'] == $course['crs_ID']) : ?>
                                     <?php $checked = true; ?>
-                                     <?php break; ?>
+                                    <?php break; ?>
                                 <?php else : ?>
                                     <?php $checked = false; ?>
                                     <?php continue; ?>
-                                <?php endif;?>
+                                <?php endif; ?>
                             <?php endforeach; ?>
 
                             <!-- Determine which Register Button to Place down -->
-                            <?php if($checked == true) : ?>
+                            <?php if ($checked == true) : ?>
                                 <button type="submit" disabled>Register</button>
                             <?php else : ?>
                                 <button type="submit">Register</button>
